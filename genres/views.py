@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from genres.models import Genres
 
 @csrf_exempt
-def genres_create_list_view(request): # endpoint que lista/cadastra um genero (GET/POST)
+def genre_create_list_view(request): # endpoint que lista/cadastra um genero (GET/POST)
     if request.method == 'GET':
         genres = Genres.objects.all() # retorna um queryset com todo objetos do modelo
         data = [{'id': genre.id, 'genres': genre.name} for genre in genres] # serializando meu queryset manualmente
@@ -18,18 +18,6 @@ def genres_create_list_view(request): # endpoint que lista/cadastra um genero (G
         return JsonResponse(
             {'id': new_genre.id,'name':new_genre.name},status=201
             )
-    
-@csrf_exempt
-def genres_create_recurso(request): # endpoint para cadastrar objeto
-    genre = json.loads(request.body.decode('utf-8'))
-    new_genre = Genres(name=genre['name'])
-    new_genre.save()
-    return JsonResponse(
-        {
-            'id':new_genre.id,
-            'name':new_genre.name
-        }
-    )
 
 def genre_detail_view(request, pk): # endpoint para buscar um objeto específico
     genre = get_object_or_404(Genres, pk=pk) # apis rest devem retornar 404 caso objeto não encontrado no bd
@@ -45,20 +33,12 @@ def genre_detail_view(request, pk): # endpoint para buscar um objeto específico
         return JsonResponse(
             {'id':genre.id, 'name':genre.name}
         )
-    
-def genre_update_recurso(request, pk): # endpoint para editar objeto específico 
-    genre = get_object_or_404(Genres, pk=pk)
-    data_update = json.loads(request.body.decode('utf-8'))
-    genre['name'] = data_update['name']
-    genre.save()
-    return JsonResponse(
-        {
-            'id':genre.id,
-            'genre':genre.name
-        }
-    )
 
+    elif request.method == 'DELETE':
+        genre.delete()
+        return JsonResponse(
+            {
+                'message':'Gênero excluído com sucesso'
+            }, status=204
+        )
 
-def genre_delete_recurso(request, pk):
-    genre = get_object_or_404(Genres, pk=pk)
-    genre.delete()
