@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'genres',
     'actors',
+    'movies',
+    'reviews',
     'rest_framework',
 ]
 
