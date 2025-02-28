@@ -10,7 +10,7 @@ class Actors(models.Model):
     name = models.CharField(max_length=100)
     nationality = models.CharField(
         max_length=50,
-        choices=NATIONALITY_CHOICES, # choices defini quais strings podem ser usadas nesse campo
+        choices=NATIONALITY_CHOICES, # choices define quais strings podem ser usadas nesse campo
         blank=True,
         null=True
     )
