@@ -8,7 +8,7 @@ class Movie(models.Model):
                               on_delete=models.PROTECT,
                               related_name='movies') # protegendo o genêro para não ser deleta caso estiver em uso 
     release_date = models.DateField()
-    actors = models.ManyToManyField(Actors, related_name='movies')
+    actors = models.ManyToManyField(Actors, related_name='movies_actors')
     resume = models.TextField(blank=True, null=True)
 
     def __str__(self):

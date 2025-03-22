@@ -10,7 +10,7 @@ class GlobalPermissions(permissions.BasePermission):
         if not model_permision_codename:
             return False
 
-        return request.user.has_perm(model_permision_codename)
+        return request.user.has_perm(model_permision_codename) # verifica sr o user ter permissão para determinada ação/certbo http
 
     def __get_model_permission_codename(self,method, view):
         try:

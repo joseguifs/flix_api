@@ -3,24 +3,14 @@ from django.db.models import Avg
 from movies.models import Movie
 from genres.serializers import GenreSerializers
 from genres.models import Genres
+from genres.serializers import GenreSerializers
 from actors.models import Actors 
+from actors.serializers import ActorsSerializers
 
 class MoviesSerializers(serializers.ModelSerializer):
-    rate = serializers.SerializerMethodField(read_only=True) # campo calculado (campo que não está na minha tabela movie) que será adicionado nas resposta json mas que não está na tabela movie
-
-    # read_only=True define que o campo so pode adicinado no json para resposta/leituras (get)
-
-    # função que vai calcular o valor do campo rate deve começar com get_<nome_do_campo>
-    def get_rate(self, obj): # obj será o objeto/registro da tabela que estará sendo serializado
-        rate = obj.reviews.aggregate(Avg('stars'))['stars__Avg'] # if 
-
-        if rate:
-            return rate
-        return None      
     class Meta:
         model = Movie # model onde será extraido os dados
         fields = '__all__' # campos que serão serializados para formato json 
-
 
     # função de validação de campo
     def validate_resume(self, value): # value é o parametro que receberá como argumento o valor passado pro campo que queremos validar
@@ -33,6 +23,24 @@ class MoviesSerializers(serializers.ModelSerializer):
             raise serializers.ValidationError('Filme muito antigo')
         return value
     # caso um campo do json marcado como inválido, logo todo o json é inválido
+
+class MovieDetailSerializers(serializers.ModelSerializer):
+    actors = ActorsSerializers(many = True)
+    genre = GenreSerializers()    
+    rate = serializers.SerializerMethodField(read_only=True) # campo calculado (campo que não está na minha tabela movie) que será adicionado nas resposta json mas que não está na tabela movie
+
+    # read_only=True define que o campo so pode adicinado no json para resposta/leituras (get)
+
+    # função que vai calcular o valor do campo rate deve começar com get_<nome_do_campo>
+    def get_rate(self, obj): # obj será o objeto/registro da tabela que estará sendo serializado
+        rate = obj.reviews.aggregate(Avg('stars'))['stars__Avg'] # if 
+
+        if rate:
+            return rate
+        return None      
+    class Meta:
+        model = Movie
+        fields = ['id', 'title', 'genre', 'actors', 'release_date', 'rate', 'resume']
 
 class MovieStatsSerializer(serializers.Serializer): # EX de serializer para usar em um endpoint feito na mão (desnecessário)
     total_movies = serializers.IntegerField()
