@@ -7,7 +7,7 @@ from movies.models import Movie
 def update_number_movies(movie):
     id = movie.genre.id
     genre = Genres.objects.get(id=id)
-    genre.number_movies = Movie.objects.filter(genre__name__icontains=genre).count()
+    genre.number_movies = Movie.objects.filter(genre__name__icontains=genre).count() # corrigir pois o icontains espera um argumento do tipo string 
     genre.save()
 
 @receiver(post_save, sender=Movie)

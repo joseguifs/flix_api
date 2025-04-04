@@ -33,7 +33,7 @@ class MovieDetailSerializers(serializers.ModelSerializer):
 
     # função que vai calcular o valor do campo rate deve começar com get_<nome_do_campo>
     def get_rate(self, obj): # obj será o objeto/registro da tabela que estará sendo serializado
-        rate = obj.reviews.aggregate(Avg('stars'))['stars__Avg'] # if 
+        rate = obj.reviews.aggregate(Avg('stars'))['stars__Avg']  
 
         if rate:
             return rate

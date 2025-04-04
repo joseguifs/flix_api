@@ -9,7 +9,8 @@ from django.db.models import Avg
 
 
 class MovieListCreateView(ListCreateAPIView):
-    permission_classes = (IsAuthenticated, GlobalPermissions,)
+    permission_classes = (IsAuthenticated, GlobalPermissions,) # define se o user autenticado pode ou não para acessar a view
+    authentication_classes = [] # define como iremos autenticar/identificar o user da request 
     queryset = Movie.objects.all()
     
     
@@ -65,3 +66,6 @@ class MoviesStats(views.APIView): # view criada manualmente (definindo métodos 
 
 
 # para construirmos uma view que vá alem de uma operação do crud podemos herdar de apiview, assim podendo definir o comportamento dessa view, métodos: get, post, delete e etc
+
+#  Protegendo o logout (opcional):
+# Em muitos casos, você pode querer garantir que apenas usuários autenticados possam acessar o endpoint de logout. Você pode fazer isso com o decorator login_required.  é baseado na sessão do usuário, e a função logout() simplesmente remove o usuário autenticado da sessão.
